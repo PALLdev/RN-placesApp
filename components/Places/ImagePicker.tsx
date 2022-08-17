@@ -1,4 +1,4 @@
-import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import {
   launchCameraAsync,
   useCameraPermissions,
@@ -6,6 +6,7 @@ import {
 } from "expo-image-picker";
 import { useState } from "react";
 import { Colors } from "../../constants/colors";
+import OutlineButton from "../ui/OutlineButton";
 
 const ImagePicker = () => {
   const [pickedImage, setPickedImage] = useState("");
@@ -35,9 +36,7 @@ const ImagePicker = () => {
   const takeImageHandler = async () => {
     const hasPermission = await verifyPermissions();
 
-    if (!hasPermission) {
-      return;
-    }
+    if (!hasPermission) return;
 
     const image = await launchCameraAsync({
       allowsEditing: true,
@@ -45,9 +44,8 @@ const ImagePicker = () => {
       quality: 0.5,
     });
 
-    if (!image.cancelled) {
-      setPickedImage(image.uri);
-    }
+    if (image.cancelled) return;
+    setPickedImage(image.uri);
   };
 
   let imagePreview = (
@@ -63,7 +61,9 @@ const ImagePicker = () => {
   return (
     <View>
       <View style={styles.imagePrev}>{imagePreview}</View>
-      <Button title="Tomar foto" onPress={takeImageHandler} />
+      <OutlineButton onPress={takeImageHandler} icon="camera" size={18}>
+        Tomar foto
+      </OutlineButton>
     </View>
   );
 };
