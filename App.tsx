@@ -48,7 +48,7 @@ export default function App() {
                 <IconButton
                   icon="add-circle-outline"
                   color={tintColor}
-                  size={30}
+                  size={25}
                   onPress={pressAddIconHandler.bind(null, navigation)}
                 />
               ),

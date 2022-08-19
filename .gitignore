@@ -10,5 +10,8 @@ npm-debug.*
 *.orig.*
 web-build/
 
+# ignoring helper function with keys
+util/location.ts
+
 # macOS
 .DS_Store

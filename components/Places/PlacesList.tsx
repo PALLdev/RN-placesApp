@@ -14,7 +14,7 @@ const PlacesList = ({ items }: PlacesListProps) => {
     return (
       <View style={styles.fallbackContainer}>
         <Text style={styles.fallbackText}>
-          No has agregado lugares a la lista
+          No has agregado lugares a tu lista
         </Text>
       </View>
     );
