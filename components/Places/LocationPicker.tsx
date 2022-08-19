@@ -7,11 +7,15 @@ import {
 import { Colors } from "../../constants/colors";
 import OutlineButton from "../ui/OutlineButton";
 import { useState } from "react";
-import { LocationType } from "../../util/types";
+import { LocationType, RootStackParamList } from "../../util/types";
 import { getMapPreview } from "../../util/location";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const LocationPicker = () => {
   const [pickedLocation, setPickedLocation] = useState<LocationType>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   // const [locationPermissionInfo, requestPermission] = useForegroundPermissions();
 
   const verifyPermissions = async () => {
@@ -39,7 +43,9 @@ const LocationPicker = () => {
     });
   };
 
-  const pickOnMapHandler = () => {};
+  const pickOnMapHandler = () => {
+    navigation.navigate("Map");
+  };
 
   let locationPreview = (
     <Text style={styles.fallbackText}>

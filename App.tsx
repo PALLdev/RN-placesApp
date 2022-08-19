@@ -9,11 +9,8 @@ import AllPlaces from "./screens/AllPlaces";
 import AddPlaces from "./screens/AddPlaces";
 import IconButton from "./components/ui/IconButton";
 import { Colors } from "./constants/colors";
-
-type RootStackParamList = {
-  AllPlaces: undefined;
-  AddPlace: undefined;
-};
+import Map from "./screens/Map";
+import { RootStackParamList } from "./util/types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -60,6 +57,11 @@ export default function App() {
             options={{
               title: "Agrega un lugar",
             }}
+          />
+          <Stack.Screen
+            name="Map"
+            component={Map}
+            options={{ title: "Selecciona la ubicación" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
