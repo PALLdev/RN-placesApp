@@ -5,7 +5,9 @@ import MapView, { MapEvent, Marker, Region } from "react-native-maps";
 import IconButton from "../components/ui/IconButton";
 import { LocationType, RootStackParamList } from "../util/types";
 
-const Map = ({ navigation }: NativeStackScreenProps<RootStackParamList>) => {
+const Map = ({
+  navigation,
+}: NativeStackScreenProps<RootStackParamList, "Map">) => {
   const [selectedLocation, setSelectedLocation] = useState<LocationType>();
 
   const region: Region = {
