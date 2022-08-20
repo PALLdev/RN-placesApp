@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useCallback, useLayoutEffect, useState } from "react";
+import { Alert, StyleSheet } from "react-native";
 import MapView, { MapEvent, Marker, Region } from "react-native-maps";
-import { LocationType } from "../util/types";
+import IconButton from "../components/ui/IconButton";
+import { LocationType, RootStackParamList } from "../util/types";
 
-const Map = () => {
+const Map = ({ navigation }: NativeStackScreenProps<RootStackParamList>) => {
   const [selectedLocation, setSelectedLocation] = useState<LocationType>();
 
   const region: Region = {
@@ -20,6 +22,34 @@ const Map = () => {
     // reevaluates the component after selecting a location
     setSelectedLocation({ lat: latitude, lng: longitude });
   };
+
+  // usecallbacks prevents infinite loops or unnecesary effect re-execution bc this func in an effect dependency
+  const saveSelectedLocationHandler = useCallback(() => {
+    if (!selectedLocation) {
+      Alert.alert(
+        "Error al guardar ubicación",
+        "Debes seleccionar una ubicación en el mapa antes de guardar"
+      );
+      return;
+    }
+    navigation.navigate("AddPlace", {
+      lat: selectedLocation.lat,
+      lng: selectedLocation.lng,
+    });
+  }, [selectedLocation, navigation]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: ({ tintColor }) => (
+        <IconButton
+          icon="save-outline"
+          color={tintColor}
+          onPress={saveSelectedLocationHandler}
+          size={20}
+        />
+      ),
+    });
+  }, [navigation, saveSelectedLocationHandler]);
 
   return (
     <MapView
