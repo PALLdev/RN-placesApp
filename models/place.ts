@@ -1,7 +1,7 @@
 import { LocationType } from "../util/types";
 
 export class Place {
-  id: string;
+  id?: string;
   title: string;
   address: string;
   imageUri: string;
@@ -9,14 +9,13 @@ export class Place {
 
   constructor(
     title: string,
-    address: string,
     imageUri: string,
-    location: LocationType
+    location: { address: string; lat: number; lng: number }
   ) {
     this.title = title;
-    this.address = address;
+    this.address = location.address;
     this.imageUri = imageUri;
-    this.location = location;
+    this.location = { lat: location.lat, lng: location.lng };
     this.id = new Date().toLocaleDateString() + Math.random().toString();
   }
 }
