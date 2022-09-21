@@ -8,15 +8,15 @@ import { useState } from "react";
 import { Colors } from "../../constants/colors";
 import OutlineButton from "../ui/OutlineButton";
 
-const ImagePicker = () => {
+type ImagePickerProps = {
+  onTakeImage: (imageUrl: string) => void;
+};
+
+const ImagePicker = ({ onTakeImage }: ImagePickerProps) => {
   const [pickedImage, setPickedImage] = useState("");
   const [cameraPermissionInfo, requestPermission] = useCameraPermissions();
 
   const verifyPermissions = async () => {
-    // if (cameraPermissionInfo?.status === PermissionStatus.DENIED) {
-    //   await requestPermission();
-    // }
-
     if (cameraPermissionInfo?.status === PermissionStatus.UNDETERMINED) {
       const permissionResponse = await requestPermission();
       return permissionResponse.granted;
@@ -46,6 +46,7 @@ const ImagePicker = () => {
 
     if (image.cancelled) return;
     setPickedImage(image.uri);
+    onTakeImage(image.uri);
   };
 
   let imagePreview = (

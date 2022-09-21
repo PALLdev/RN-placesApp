@@ -17,7 +17,11 @@ import OutlineButton from "../ui/OutlineButton";
 import { LocationType, RootStackParamList } from "../../util/types";
 import { getMapPreview } from "../../util/location";
 
-const LocationPicker = () => {
+type LocationPickerProps = {
+  onPickLocation: (location: LocationType) => void;
+};
+
+const LocationPicker = ({ onPickLocation }: LocationPickerProps) => {
   const [pickedLocation, setPickedLocation] = useState<LocationType>();
 
   const navigation =
@@ -49,6 +53,11 @@ const LocationPicker = () => {
 
     return true;
   };
+
+  // should make sure the passed func to onPickLocation doesnt run unnecesarly or this effect will run too
+  useEffect(() => {
+    onPickLocation(pickedLocation);
+  }, [pickedLocation, onPickLocation]);
 
   const getLocationHandler = async () => {
     const hasPermission = await verifyPermissions();
