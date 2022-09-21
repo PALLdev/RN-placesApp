@@ -4,9 +4,7 @@ export type RootStackParamList = {
   Map: undefined;
 };
 
-export type LocationType =
-  | {
-      lat: number;
-      lng: number;
-    }
-  | undefined;
+export type LocationType = {
+  lat: number;
+  lng: number;
+};

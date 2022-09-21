@@ -15,10 +15,14 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Colors } from "../../constants/colors";
 import OutlineButton from "../ui/OutlineButton";
 import { LocationType, RootStackParamList } from "../../util/types";
-import { getMapPreview } from "../../util/location";
+import { getAddress, getMapPreview } from "../../util/location";
 
 type LocationPickerProps = {
-  onPickLocation: (location: LocationType) => void;
+  onPickLocation: (location: {
+    address: string;
+    lat: number;
+    lng: number;
+  }) => void;
 };
 
 const LocationPicker = ({ onPickLocation }: LocationPickerProps) => {
@@ -42,7 +46,6 @@ const LocationPicker = ({ onPickLocation }: LocationPickerProps) => {
 
   const verifyPermissions = async () => {
     let { status } = await requestForegroundPermissionsAsync();
-
     if (status !== "granted") {
       Alert.alert(
         "Permisos insuficientes",
@@ -50,13 +53,18 @@ const LocationPicker = ({ onPickLocation }: LocationPickerProps) => {
       );
       return false;
     }
-
     return true;
   };
 
   // should make sure the passed func to onPickLocation doesnt run unnecesarly or this effect will run too
   useEffect(() => {
-    onPickLocation(pickedLocation);
+    const handleLocation = async () => {
+      if (pickedLocation) {
+        const address = await getAddress(pickedLocation);
+        onPickLocation({ ...pickedLocation, address });
+      }
+    };
+    handleLocation();
   }, [pickedLocation, onPickLocation]);
 
   const getLocationHandler = async () => {
