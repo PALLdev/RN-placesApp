@@ -10,7 +10,7 @@ const AddPlaces = ({
   const createPlaceHandler = async (place: Place) => {
     await insertPlace(place);
 
-    navigation.navigate("AllPlaces", { place });
+    navigation.navigate("AllPlaces");
   };
 
   return <PlaceForm onCreatePlace={createPlaceHandler} />;

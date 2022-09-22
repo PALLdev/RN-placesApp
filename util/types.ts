@@ -1,7 +1,5 @@
-import { Place } from "../models/place";
-
 export type RootStackParamList = {
-  AllPlaces: undefined | { place: Place };
+  AllPlaces: undefined;
   AddPlace: LocationType | undefined;
   Map: undefined;
 };
