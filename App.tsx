@@ -26,7 +26,9 @@ export default function App() {
       .then(() => {
         setDbInitialized(true);
       })
-      .then(() => SplashScreen.hideAsync())
+      .then(() => {
+        SplashScreen.hideAsync();
+      })
       .catch((err) => console.log(err));
   }, []);
 
@@ -41,6 +43,7 @@ export default function App() {
       <StatusBar style="dark" />
       <NavigationContainer>
         <Stack.Navigator
+          initialRouteName="AllPlaces"
           screenOptions={{
             headerStyle: {
               backgroundColor: Colors.primary500,

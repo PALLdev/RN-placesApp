@@ -54,3 +54,34 @@ export const insertPlace = (place: Place) => {
 
   return promise;
 };
+
+export const fetchAllPlaces = () => {
+  const promise = new Promise<Place[]>((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM places`,
+        [],
+        (_, result) => {
+          const places: Place[] = [];
+
+          for (const placeData of result.rows._array) {
+            places.push(
+              new Place(placeData.title, placeData.imageUri, {
+                address: placeData.address,
+                lat: placeData.lat,
+                lng: placeData.lng,
+              })
+            );
+          }
+          resolve(places);
+        },
+        (_, error): any => {
+          console.log("aqui");
+          reject(error);
+        }
+      );
+    });
+  });
+
+  return promise;
+};

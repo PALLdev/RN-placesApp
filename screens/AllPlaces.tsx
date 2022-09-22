@@ -1,9 +1,10 @@
-import { useIsFocused } from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
-import PlacesList from "../components/Places/PlacesList";
+import { useIsFocused } from "@react-navigation/native";
 import { Place } from "../models/place";
+import PlacesList from "../components/Places/PlacesList";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../util/types";
+import { fetchAllPlaces } from "../util/database";
 
 const AllPlaces = ({
   route,
@@ -12,10 +13,15 @@ const AllPlaces = ({
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (isFocused && route.params) {
-      setLoadedPlaces((currPlaces) => [...currPlaces, route.params!.place]);
+    async function loadPlaces() {
+      const places = await fetchAllPlaces();
+      setLoadedPlaces(places);
     }
-  }, [isFocused, route]);
+
+    if (isFocused) {
+      loadPlaces();
+    }
+  }, [isFocused]);
 
   //display list of places or some text if no places
   return <PlacesList items={loadedPlaces} />;
