@@ -1,6 +1,7 @@
 import * as SQLite from "expo-sqlite";
 import { SQLResultSet } from "expo-sqlite";
 import { Place } from "../models/place";
+import { PlaceData } from "./types";
 
 const database = SQLite.openDatabase("places.db");
 
@@ -64,19 +65,23 @@ export const fetchAllPlaces = () => {
         (_, result) => {
           const places: Place[] = [];
 
-          for (const placeData of result.rows._array) {
+          for (const placeData of result.rows._array as PlaceData[]) {
             places.push(
-              new Place(placeData.title, placeData.imageUri, {
-                address: placeData.address,
-                lat: placeData.lat,
-                lng: placeData.lng,
-              })
+              new Place(
+                placeData.title,
+                placeData.imageUri,
+                {
+                  address: placeData.address,
+                  lat: placeData.lat,
+                  lng: placeData.lng,
+                },
+                placeData.id
+              )
             );
           }
           resolve(places);
         },
         (_, error): any => {
-          console.log("aqui");
           reject(error);
         }
       );

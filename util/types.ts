@@ -8,3 +8,12 @@ export type LocationType = {
   lat: number;
   lng: number;
 };
+
+export type PlaceData = {
+  id?: string;
+  title: string;
+  imageUri: string;
+  address: string;
+  lat: number;
+  lng: number;
+};
