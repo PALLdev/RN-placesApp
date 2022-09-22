@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
+import * as SplashScreen from "expo-splash-screen";
 
 import AllPlaces from "./screens/AllPlaces";
 import AddPlaces from "./screens/AddPlaces";
@@ -11,10 +13,23 @@ import Map from "./screens/Map";
 import IconButton from "./components/ui/IconButton";
 import { Colors } from "./constants/colors";
 import { RootStackParamList } from "./util/types";
+import { init } from "./util/database";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [_, setDbInitialized] = useState(false);
+
+  useEffect(() => {
+    init()
+      .then(() => {
+        setDbInitialized(true);
+      })
+      .then(() => SplashScreen.hideAsync())
+      .catch((err) => console.log(err));
+  }, []);
+
   const pressAddIconHandler = (
     navigation: NativeStackNavigationProp<RootStackParamList>
   ) => {
