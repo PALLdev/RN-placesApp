@@ -2,6 +2,7 @@ export type RootStackParamList = {
   AllPlaces: undefined;
   AddPlace: LocationType | undefined;
   Map: undefined;
+  PlaceDetails: { placeId: string };
 };
 
 export type LocationType = {

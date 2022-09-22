@@ -11,13 +11,13 @@ import { Place } from "../../models/place";
 
 interface PlaceItemProps {
   place: ListRenderItemInfo<Place>;
-  onSelect: () => void;
+  onSelect: (id: string) => void;
 }
 
 const PlaceItem = ({ place, onSelect }: PlaceItemProps) => {
   return (
     <Pressable
-      onPress={onSelect}
+      onPress={onSelect.bind(this, place.item.id as string)}
       style={({ pressed }) => [styles.item, pressed && styles.pressed]}
     >
       <Image source={{ uri: place.item.imageUri }} style={styles.image} />
