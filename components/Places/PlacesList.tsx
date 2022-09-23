@@ -46,7 +46,8 @@ export default PlacesList;
 
 const styles = StyleSheet.create({
   list: {
-    margin: 14,
+    marginVertical: 14,
+    paddingHorizontal: 14,
   },
   fallbackContainer: {
     flex: 1,
