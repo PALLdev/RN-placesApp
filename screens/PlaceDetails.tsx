@@ -3,15 +3,16 @@ import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import OutlineButton from "../components/ui/OutlineButton";
 import { Colors } from "../constants/colors";
+import { Place } from "../models/place";
 import { getPlaceById } from "../util/database";
-import { PlaceData, RootStackParamList } from "../util/types";
+import { RootStackParamList } from "../util/types";
 
 const PlaceDetails = ({
   route,
   navigation,
 }: NativeStackScreenProps<RootStackParamList, "PlaceDetails">) => {
   const selectedPlaceId = route.params.placeId;
-  const [loadedPlace, setLoadedPlace] = useState<PlaceData>();
+  const [loadedPlace, setLoadedPlace] = useState<Place>();
 
   // fetch data for single place with selected id
   useEffect(() => {
@@ -26,7 +27,13 @@ const PlaceDetails = ({
     loadPlaceData();
   }, [selectedPlaceId]);
 
-  const showOnMapHandler = () => {};
+  const showOnMapHandler = () => {
+    if (!loadedPlace) return;
+    navigation.navigate("Map", {
+      lat: loadedPlace.location.lat,
+      lng: loadedPlace.location.lng,
+    });
+  };
 
   if (!loadedPlace) {
     return (

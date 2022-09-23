@@ -7,17 +7,26 @@ import { LocationType, RootStackParamList } from "../util/types";
 
 const Map = ({
   navigation,
+  route,
 }: NativeStackScreenProps<RootStackParamList, "Map">) => {
-  const [selectedLocation, setSelectedLocation] = useState<LocationType>();
+  const initialLocation: LocationType | undefined = route.params && {
+    lat: route.params.lat,
+    lng: route.params.lng,
+  };
+
+  const [selectedLocation, setSelectedLocation] = useState<
+    LocationType | undefined
+  >(initialLocation);
 
   const region: Region = {
-    latitude: -35.33321,
-    longitude: -72.41156,
+    latitude: initialLocation ? initialLocation.lat : -35.33321,
+    longitude: initialLocation ? initialLocation.lng : -72.41156,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
 
   const selectLocationHandler = ({ nativeEvent }: MapEvent) => {
+    if (initialLocation) return;
     const latitude = nativeEvent.coordinate.latitude;
     const longitude = nativeEvent.coordinate.longitude;
 
@@ -41,6 +50,10 @@ const Map = ({
   }, [selectedLocation, navigation]);
 
   useLayoutEffect(() => {
+    if (initialLocation) {
+      navigation.setOptions({ title: "Mapa" });
+      return;
+    }
     navigation.setOptions({
       headerRight: ({ tintColor }) => (
         <IconButton
@@ -51,7 +64,7 @@ const Map = ({
         />
       ),
     });
-  }, [navigation, saveSelectedLocationHandler]);
+  }, [navigation, saveSelectedLocationHandler, initialLocation]);
 
   return (
     <MapView

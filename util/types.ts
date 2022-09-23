@@ -1,7 +1,7 @@
 export type RootStackParamList = {
   AllPlaces: undefined;
   AddPlace: LocationType | undefined;
-  Map: undefined;
+  Map: LocationType | undefined;
   PlaceDetails: { placeId: string };
 };
 
