@@ -1,9 +1,5 @@
 import { Alert, Image, StyleSheet, Text, View } from "react-native";
-import {
-  launchCameraAsync,
-  useCameraPermissions,
-  PermissionStatus,
-} from "expo-image-picker";
+import * as ExpoImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { Colors } from "../../constants/colors";
 import OutlineButton from "../ui/OutlineButton";
@@ -14,15 +10,22 @@ type ImagePickerProps = {
 
 const ImagePicker = ({ onTakeImage }: ImagePickerProps) => {
   const [pickedImage, setPickedImage] = useState("");
-  const [cameraPermissionInfo, requestPermission] = useCameraPermissions();
+  const [cameraPermissionInfo, requestPermission] =
+    ExpoImagePicker.useCameraPermissions();
 
   const verifyPermissions = async () => {
-    if (cameraPermissionInfo?.status === PermissionStatus.UNDETERMINED) {
+    if (
+      cameraPermissionInfo?.status ===
+        ExpoImagePicker.PermissionStatus.UNDETERMINED ||
+      cameraPermissionInfo?.canAskAgain
+    ) {
       const permissionResponse = await requestPermission();
       return permissionResponse.granted;
     }
 
-    if (cameraPermissionInfo?.status === PermissionStatus.DENIED) {
+    if (
+      cameraPermissionInfo?.status === ExpoImagePicker.PermissionStatus.DENIED
+    ) {
       Alert.alert(
         "Permisos insuficientes",
         "No haz otorgado los permisos de camara necesarios para usar esta funcionalidad"
@@ -38,13 +41,14 @@ const ImagePicker = ({ onTakeImage }: ImagePickerProps) => {
 
     if (!hasPermission) return;
 
-    const image = await launchCameraAsync({
+    const image = await ExpoImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [16, 9],
       quality: 0.5,
     });
 
     if (image.cancelled) return;
+
     setPickedImage(image.uri);
     onTakeImage(image.uri);
   };
