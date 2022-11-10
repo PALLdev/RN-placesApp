@@ -15,23 +15,18 @@ import Map from "./screens/Map";
 import IconButton from "./components/ui/IconButton";
 import { Colors } from "./constants/colors";
 import { RootStackParamList } from "./util/types";
-import { init } from "./util/database";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [_, setDbInitialized] = useState(false);
-
+  const [init, setIsinit] = useState(false);
   useEffect(() => {
-    init()
-      .then(() => {
-        setDbInitialized(true);
-      })
-      .then(() => {
-        SplashScreen.hideAsync();
-      })
-      .catch((err) => console.log(err));
+    const dothis = async () => {
+      setIsinit(true);
+      await SplashScreen.hideAsync();
+    };
+    dothis();
   }, []);
 
   const pressAddIconHandler = (
@@ -41,57 +36,59 @@ export default function App() {
   };
 
   return (
-    <>
-      <StatusBar style="dark" />
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="AllPlaces"
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: Colors.primary500,
-            },
-            headerTintColor: Colors.gray700,
-            contentStyle: {
-              backgroundColor: Colors.gray700,
-            },
-          }}
-        >
-          <Stack.Screen
-            name="AllPlaces"
-            component={AllPlaces}
-            options={({ navigation }) => ({
-              title: "Lugares favoritos",
-              headerRight: ({ tintColor }) => (
-                <IconButton
-                  icon="add-circle-outline"
-                  color={tintColor}
-                  size={25}
-                  onPress={pressAddIconHandler.bind(null, navigation)}
-                />
-              ),
-            })}
-          />
-          <Stack.Screen
-            name="AddPlace"
-            component={AddPlaces}
-            options={{
-              title: "Agrega un lugar",
+    init && (
+      <>
+        <StatusBar style="dark" />
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="AllPlaces"
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: Colors.primary500,
+              },
+              headerTintColor: Colors.gray700,
+              contentStyle: {
+                backgroundColor: Colors.gray700,
+              },
             }}
-          />
-          <Stack.Screen
-            name="Map"
-            component={Map}
-            options={{ title: "Selecciona la ubicación" }}
-          />
-          <Stack.Screen
-            name="PlaceDetails"
-            component={PlaceDetails}
-            options={{
-              title: "Cargando detalles del lugar...",
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </>
+          >
+            <Stack.Screen
+              name="AllPlaces"
+              component={AllPlaces}
+              options={({ navigation }) => ({
+                title: "Lugares favoritos",
+                headerRight: ({ tintColor }) => (
+                  <IconButton
+                    icon="add-circle-outline"
+                    color={tintColor}
+                    size={25}
+                    onPress={pressAddIconHandler.bind(null, navigation)}
+                  />
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="AddPlace"
+              component={AddPlaces}
+              options={{
+                title: "Agrega un lugar",
+              }}
+            />
+            <Stack.Screen
+              name="Map"
+              component={Map}
+              options={{ title: "Selecciona la ubicación" }}
+            />
+            <Stack.Screen
+              name="PlaceDetails"
+              component={PlaceDetails}
+              options={{
+                title: "Cargando detalles del lugar...",
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </>
+    )
   );
 }
