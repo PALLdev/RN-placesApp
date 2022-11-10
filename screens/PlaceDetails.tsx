@@ -4,7 +4,7 @@ import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import OutlineButton from "../components/ui/OutlineButton";
 import { Colors } from "../constants/colors";
 import { Place } from "../models/place";
-import { getPlaceById } from "../util/database";
+import { getPlaceFromDb } from "../util/http";
 import { RootStackParamList } from "../util/types";
 
 const PlaceDetails = ({
@@ -17,7 +17,7 @@ const PlaceDetails = ({
   // fetch data for single place with selected id
   useEffect(() => {
     const loadPlaceData = async () => {
-      const place = await getPlaceById(selectedPlaceId);
+      const place = await getPlaceFromDb(selectedPlaceId);
       setLoadedPlace(place);
       navigation.setOptions({
         title: place.title,

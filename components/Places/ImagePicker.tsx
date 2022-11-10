@@ -15,16 +15,17 @@ const ImagePicker = ({ onTakeImage }: ImagePickerProps) => {
 
   const verifyPermissions = async () => {
     if (
-      cameraPermissionInfo?.status ===
+      !cameraPermissionInfo ||
+      cameraPermissionInfo.status ===
         ExpoImagePicker.PermissionStatus.UNDETERMINED ||
-      cameraPermissionInfo?.canAskAgain
+      cameraPermissionInfo.canAskAgain
     ) {
       const permissionResponse = await requestPermission();
       return permissionResponse.granted;
     }
 
     if (
-      cameraPermissionInfo?.status === ExpoImagePicker.PermissionStatus.DENIED
+      cameraPermissionInfo.status === ExpoImagePicker.PermissionStatus.DENIED
     ) {
       Alert.alert(
         "Permisos insuficientes",
@@ -38,7 +39,6 @@ const ImagePicker = ({ onTakeImage }: ImagePickerProps) => {
 
   const takeImageHandler = async () => {
     const hasPermission = await verifyPermissions();
-
     if (!hasPermission) return;
 
     const image = await ExpoImagePicker.launchCameraAsync({
@@ -47,7 +47,7 @@ const ImagePicker = ({ onTakeImage }: ImagePickerProps) => {
       quality: 0.5,
     });
 
-    if (image.cancelled) return;
+    if (!image || image.cancelled) return;
 
     setPickedImage(image.uri);
     onTakeImage(image.uri);
